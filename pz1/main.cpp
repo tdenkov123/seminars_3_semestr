@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using std::cout;
 using std::cin;
@@ -6,18 +7,21 @@ using std::cin;
 class dynamicMassive {
     private:
         int massiveSize;
-        int* massive;
+        int8_t* massive;
 
     public:
         // Конструктор
         dynamicMassive(int p_massiveSize) : massiveSize(p_massiveSize) {
-            massive = new int[massiveSize];
+            massive = new int8_t[massiveSize];
+            for(int i = 0; i < massiveSize;i++) {
+                cin >> massive[i];
+            }
         }
 
         // Конструктор копирования
         dynamicMassive(dynamicMassive &mas) {
             massiveSize = mas.getLen();
-            massive = new int[massiveSize];
+            massive = new int8_t[massiveSize];
             for (int i = 0; i < massiveSize; i++) {massive[i] = mas.getNum(i);}
         }
 
@@ -43,7 +47,7 @@ class dynamicMassive {
         int getLen() {return massiveSize;}
 
         // Сеттер
-        void setNum(int num, int index) {
+        void setNum(int8_t num, int index) {
             if (index >= 0 && index < massiveSize && intervalCheck(num)) {massive[index] = num;}
         }
 
@@ -56,14 +60,14 @@ class dynamicMassive {
         }
 
         // Функция добавления в конец массива
-        void massive_add(int newNum) {
+        void massive_add(int8_t newNum) {
             if (!intervalCheck(newNum)) {
                 cout << "Number out of interval\n";
             }
             else {
-                int* tempMas {new int[massiveSize]};
+                int8_t* tempMas {new int8_t[massiveSize]};
                 for (int i = 0; i < massiveSize; i++) {tempMas[i] = massive[i];}
-                massive = {new int[massiveSize+1]};
+                massive = {new int8_t[massiveSize+1]};
                 for (int i = 0; i < massiveSize; i++) {massive[i] = tempMas[i];}
                 massive[massiveSize] = newNum;
                 massiveSize++;
@@ -88,30 +92,16 @@ dynamicMassive add_massives(dynamicMassive mas1, dynamicMassive mas2) {
 }
 
 int main() {
-    dynamicMassive cat{5};
-    dynamicMassive dog{10};
+    int n1;
+    cin >> n1;
+    dynamicMassive cat{n1};
 
-    cat.setNum(49, 0);
-    cat.setNum(23, 1);
-    cat.setNum(11, 2);
-    cat.setNum(12, 3);
-    cat.setNum(19, 4);
+    int n2;
+    cin >> n2;
+    dynamicMassive dawg{n2};
 
-    dog.setNum(49, 0);
-    dog.setNum(23, 1);
-    dog.setNum(11, 2);
-    dog.setNum(12, 3);
-    dog.setNum(19, 4);
-    dog.setNum(5, 5);
-    dog.setNum(1, 6);
-    dog.setNum(95, 7);
-    dog.setNum(59, 8);
-    dog.setNum(34, 9);
-
-    add_massives(cat, dog).print();
-
-    dog.print();
     cat.print();
+    dawg.print();
 
     return 0;
 }
