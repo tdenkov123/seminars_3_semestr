@@ -37,7 +37,7 @@ class dynamicMassive {
         }
 
         // Геттеры
-        int getNum(int index) {
+        int8_t getNum(int index) {
             if (index >= 0 && index < massiveSize) {return massive[index];}
             else {
                 cout << "Index out of range, returned -1\n";
@@ -60,7 +60,7 @@ class dynamicMassive {
         }
 
         // Функция добавления в конец массива
-        void massive_add(int8_t newNum) {
+        void append(int8_t newNum) {
             if (!intervalCheck(newNum)) {
                 cout << "Number out of interval\n";
             }
@@ -74,22 +74,18 @@ class dynamicMassive {
                 delete[] tempMas;
             }
         }
+
+        // Функция сложения массивов
+        void add(dynamicMassive &mas) {
+            for (int i = 0; i < mas.getLen();i++) {massive[i] += mas.getNum(i);}
+        }
+
+        // Функция вычитания массивов
+        void substract(dynamicMassive mas) {
+            for (int i = 0; i < mas.getLen();i++) {massive[i] -= mas.getNum(i);}
+        }
 };
 
-// Функция сложения массивов
-dynamicMassive add_massives(dynamicMassive mas1, dynamicMassive mas2) {
-    int len1 = mas1.getLen(), len2 = mas2.getLen();
-    if (len1 >= len2) {
-        dynamicMassive newMas{mas1};
-        for (int i = 0; i < len2; i++) {newMas.setNum(newMas.getNum(i) + mas2.getNum(i), i);}
-        return newMas;
-    }
-    else if (len2 >= len1) {
-        dynamicMassive newMas{mas2};
-        for (int i = 0; i < len1; i++) {newMas.setNum(newMas.getNum(i) + mas1.getNum(i), i);}
-        return newMas;
-    }
-}
 
 int main() {
     int n1;
@@ -100,8 +96,8 @@ int main() {
     cin >> n2;
     dynamicMassive dawg{n2};
 
+    cat.add(dawg);
     cat.print();
-    dawg.print();
 
     return 0;
 }
