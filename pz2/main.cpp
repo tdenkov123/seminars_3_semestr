@@ -24,7 +24,9 @@ class dynamicMassive {
         dynamicMassive(dynamicMassive &mas) {
             massiveSize = mas.getLen();
             massive = new int16_t[massiveSize];
-            for (int i = 0; i < massiveSize; i++) {massive[i] = mas.getNum(i);}
+            for (int i = 0; i < massiveSize; i++) {
+                massive[i] = mas.getNum(i);
+            }
         }
 
         // Деструктор
@@ -33,30 +35,41 @@ class dynamicMassive {
         }
 
         // Функция проверки на принадлежность к интервалу [-100;100]
-        bool intervalCheck(int num) {
-            if (num <= 100 && num >= -100) {return true;}
-            else {
-                cout << "std::invalid_argument\n";
-                return false;
+        void intervalCheck(int num, int command) {
+            if (abs(num) > 100) {
+                if (command == 1) {
+                    throw std::invalid_argument("std:invalid_argument:set");
+                } else {
+                    throw std::invalid_argument("std:invalid_argument:push_back");
+                }
             }
         }
         // Функция проверки индекса
-        bool indexCheck(int index, int massiveSize) {
-            if (index >= 0 && index < massiveSize) {return true;}
-            else {
-                cout << "std::out_of_range\n";
-                return false;
+        void indexCheck(int index, int massiveSize, int command) {
+            if (index < 0 || index >= massiveSize) {
+                if (command == 1) {
+                    throw std::out_of_range("std:out_of_range:get");
+                } else {
+                    throw std::out_of_range("std:out_of_range:set");
+                }
             }
         }
 
         // Геттеры
-        int16_t getNum(int index) {if (indexCheck(index, massiveSize)) {return massive[index];}}
+        int16_t getNum(int index) {
+            indexCheck(index, massiveSize, 1);
+            return massive[index];
+        }
 
-        int getLen() {return massiveSize;}
+        int getLen() {
+            return massiveSize;
+        }
 
         // Сеттер
         void setNum(int16_t num, int index) {
-            if (indexCheck(index, massiveSize) && intervalCheck(num)) {massive[index] = num;}
+            indexCheck(index, massiveSize, 2);
+            intervalCheck(num, 1);
+            massive[index] = num;
         }
 
         // Функция вывода
@@ -69,25 +82,27 @@ class dynamicMassive {
 
         // Функция добавления в конец массива
         void append(int16_t newNum) {
-            if (intervalCheck(newNum)) {
-                int16_t* tempMas {new int16_t[massiveSize]};
-                for (int i = 0; i < massiveSize; i++) {tempMas[i] = massive[i];}
-                massive = {new int16_t[massiveSize+1]};
-                for (int i = 0; i < massiveSize; i++) {massive[i] = tempMas[i];}
-                massive[massiveSize] = newNum;
-                massiveSize++;
-                delete[] tempMas;
+            intervalCheck(newNum, 2);
+            massiveSize++;
+            massive = (int16_t*) realloc(massive, massiveSize*sizeof(int16_t));
+            if (massive == nullptr) {
+                throw std::bad_alloc();
             }
+            massive[massiveSize-1] = newNum;
         }
 
         // Функция сложения массивов
         void add(dynamicMassive &mas) {
-            for (int i = 0; i < mas.getLen();i++) {massive[i] += mas.getNum(i);}
+            for (int i = 0; i < mas.getLen();i++) {
+                massive[i] += mas.getNum(i);
+            }
         }
 
         // Функция вычитания массивов
         void substract(dynamicMassive mas) {
-            for (int i = 0; i < mas.getLen();i++) {massive[i] -= mas.getNum(i);}
+            for (int i = 0; i < mas.getLen();i++) {
+                massive[i] -= mas.getNum(i);
+            }
         }
 };
 
@@ -109,34 +124,65 @@ int main() {
         int16_t num;
         cin >> command >> arr_index;        
 
-        switch (command) {
-            case 1:
-                cin >> index;
-                if (arr_index == 1) {cout << mas1.getNum(index) << endl;}
-                else {cout << mas2.getNum(index) << endl;}
-                break;
-            case 2:
-                cin >> index >> num;
-                if (arr_index == 1) {mas1.setNum(num, index);}
-                else {mas2.setNum(num, index);}
-                break;
-            case 3:
-                cin >> num;
-                if (arr_index == 1) {mas1.append(num);}
-                else {mas1.append(num);}
-                break;
-            case 4:
-                if (arr_index == 1) {mas1.print();}
-                else {mas1.print();}
-                break;
-            case 5:
-                if (arr_index == 1) {mas1.add(mas2);}
-                else {{mas2.add(mas1);}}
-                break;
-            case 6:
-                if (arr_index == 1) {mas1.substract(mas2);}
-                else {{mas2.substract(mas1);}}
-                break;
+        try {
+            switch (command) {
+                case 1:
+                    cin >> index;
+                    if (arr_index == 1) {
+                        cout << mas1.getNum(index) << endl;
+                    }
+                    else {
+                        cout << mas2.getNum(index) << endl;
+                    }
+                    break;
+                case 2:
+                    cin >> index >> num;
+                    if (arr_index == 1) {
+                        mas1.setNum(num, index);
+                        }
+                    else {
+                        mas2.setNum(num, index);
+                    }
+                    break;
+                case 3:
+                    cin >> num;
+                    if (arr_index == 1) {
+                        mas1.append(num);
+                        }
+                    else {
+                        mas2.append(num);
+                    }
+                    break;
+                case 4:
+                    if (arr_index == 1) {
+                        mas1.print();
+                    }
+                    else {
+                        mas2.print();
+                    }
+                    break;
+                case 5:
+                    if (arr_index == 1) {
+                        mas1.add(mas2);
+                    }
+                    else {
+                        mas2.add(mas1);
+                    }
+                    break;
+                case 6:
+                    if (arr_index == 1) {
+                        mas1.substract(mas2);
+                    }
+                    else {
+                        mas2.substract(mas1);
+                    }
+                    break;
+            }
+        } catch (std::bad_alloc) {
+            cout << "std:bad_alloc\n";
+            exit(1);
+        } catch (const std::exception &ex) {
+            cout << ex.what() << endl;
         }
     }
     return 0;
