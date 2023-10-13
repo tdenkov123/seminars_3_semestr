@@ -130,8 +130,7 @@ int main() {
                     cin >> index;
                     if (arr_index == 1) {
                         cout << mas1.getNum(index) << endl;
-                    }
-                    else {
+                    } else {
                         cout << mas2.getNum(index) << endl;
                     }
                     break;
@@ -139,8 +138,7 @@ int main() {
                     cin >> index >> num;
                     if (arr_index == 1) {
                         mas1.setNum(num, index);
-                        }
-                    else {
+                        } else {
                         mas2.setNum(num, index);
                     }
                     break;
@@ -148,32 +146,28 @@ int main() {
                     cin >> num;
                     if (arr_index == 1) {
                         mas1.append(num);
-                        }
-                    else {
+                        } else {
                         mas2.append(num);
                     }
                     break;
                 case 4:
                     if (arr_index == 1) {
                         mas1.print();
-                    }
-                    else {
+                    } else {
                         mas2.print();
                     }
                     break;
                 case 5:
                     if (arr_index == 1) {
                         mas1.add(mas2);
-                    }
-                    else {
+                    } else {
                         mas2.add(mas1);
                     }
                     break;
                 case 6:
                     if (arr_index == 1) {
                         mas1.substract(mas2);
-                    }
-                    else {
+                    } else {
                         mas2.substract(mas1);
                     }
                     break;
