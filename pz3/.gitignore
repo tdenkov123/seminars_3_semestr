@@ -1,0 +1,10 @@
+/.vscode
+/.vs
+
+/build
+/out
+
+/.git
+
+*.exe
+*.o

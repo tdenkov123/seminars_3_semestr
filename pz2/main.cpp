@@ -107,7 +107,7 @@ class dynamicMassive {
 };
 
 
-int main() {
+int main(int argc, char* argv[]) {
     int n1;
     cin >> n1;
     dynamicMassive mas1{n1};
