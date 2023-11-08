@@ -21,13 +21,17 @@ class CacheMassive {
             }
         } *head;
         int last_id = 0;
+        int size;
     public:
         CacheMassive(T p_data) {
             head = new Node(p_data, nullptr, nullptr, last_id);
             last_id++;
+            size = 1;
         };
         CacheMassive(CacheMassive& p_mas) {
             head = p_mas.head;
+            last_id = p_mas.last_id;
+            size = p_mas.size;
         }
         ~CacheMassive() {
             Node* curr = head;
@@ -55,6 +59,10 @@ class CacheMassive {
             return tmp->id;
             call_sorting();
         }
+
+        int getSize() {return size;}
+
+        int getLastId() {return last_id;}
         
         void push_back(T elem) {
             Node* tmp = head;
@@ -63,17 +71,18 @@ class CacheMassive {
             }
             tmp->next = new Node(elem, tmp, nullptr, last_id);
             last_id++;
+            size++;
         }
 
-        /*
         void call_soorting() {
             Node* tmp = head;
             bool flag = true;
-            while (flag) {
-                while (tmp->next) {
-                    
+            for (int i = 0; i < size; i++) {
+                for (int j = 0; j < size - i - 1; j++) {
+                    Node* tmp_next = tmp->next;
+                    if (tmp->accessCount < tmp_next->accessCount) swap(&tmp, &tmp_next);
                 }
             }
         }
-        */
+        
 };
