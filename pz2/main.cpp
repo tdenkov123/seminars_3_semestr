@@ -106,7 +106,7 @@ class dynamicMassive {
         }
 
         // Функция сложения массивов
-        void add(dynamicMassive &mas) {
+        void add(dynamicMassive mas) {
             for (int i = 0; i < mas.getLen();i++) {
                 massive[i] += mas.getElem(i);
             }
@@ -119,7 +119,7 @@ class dynamicMassive {
             }
         }
 
-        int distance(dynamicMassive &mas2) {
+        int distance(dynamicMassive mas2) {
             if (massiveSize != mas2.getLen()) throw std::invalid_argument("std::invalid_argument");
             if (!(is_arithmetic_v<T> && mas2.arithmertic())) throw std::bad_typeid();
             int sum = 0;
