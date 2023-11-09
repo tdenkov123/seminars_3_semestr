@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void generate() {
+void generate(int str_len) {
     string chars;
     for (int i = 65; i < 91; i++) chars += char(i);
     for (int i = 48; i < 58; i++) chars += char(i);
@@ -20,7 +20,7 @@ void generate() {
     for (int i = 0; i < 100; i++) {
         string tmp = "";
         srand(i * 295689 + int(time(NULL)));
-        for (int j = 0; j < 3 + rand() % 5; j++) tmp += chars[rand() % 36];
+        for (int j = 0; j < str_len; j++) tmp += chars[rand() % 36];
         str_vector.push_back(tmp);
     }
     // Пишем в файл вариации каждой строки

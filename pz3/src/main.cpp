@@ -8,7 +8,7 @@
 using namespace std;
 
 int main(int argc, char* argv[]) {
-    generate();
+    generate(3);
     cout << "Strings generated succesfully!\n";
 
     ifstream strings;
@@ -18,8 +18,10 @@ int main(int argc, char* argv[]) {
     hashFunction();
     cout << "Hashes generated succesfully!\n";
     
-    cout << "Collisions for strings: " << collisionCheck("strings.txt") << '\n';
-    cout << "Collisions for hashes: " << collisionCheck("hashes.txt") << '\n';
+    vector<long long> collisionsStrings = collisionCheck("strings.txt");
+    vector<long long> collisionsHashes = collisionCheck("hashes.txt");
+    cout << "Collisions for strings: " << collisionsStrings[0] << ", elapsed time: " << collisionsStrings[1] << '\n';
+    cout << "Collisions for hashes: " << collisionsHashes[0] << ", elapsed time: " << collisionsHashes[1] << '\n';;
 
     return 0;
 }
