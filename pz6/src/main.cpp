@@ -1,21 +1,38 @@
 #include <iostream>
-
 #include "CacheMassive.h"
-
-using namespace std;
 
 int main(int argc, char** argv) {
     CacheMassive<int> m;
-    m.push_back(10, 1);
-    m.push_back(20, 2);
-    m.push_back(5, 3);
-    m.push_back(100, 4);
-
-    if (m.getSize()) cout << m.getSize();
-    else cout << ';';
- 
-    cout << m.getElem(4) << '\n';
-    m.print();
+    int n, command, command_count, id, elem;
+    std::cin >> n;
+    for (int i = 0; i < n; i++) {
+        std::cin >> id >> elem;
+        m.push_back(elem, id);
+    }
+    
+    std::cin >> command_count;
+    for (int i = 0; i < command_count; i++) {
+        std::cin >> command;
+        switch (command) {
+        case 1:
+            std::cin >> id >> elem;
+            m.update(id, elem);
+            break;
+        case 2:
+            std::cin >> id;
+            m.raiseAccessCount(id);
+            break;
+        case 3:
+            std::cin >> elem;
+            m.search(elem);
+            break;
+        case 4:
+            m.print();
+            break;
+        default:
+            std::cout << "Enter other command from 1 to 4.\n";
+        }
+    }
 
     return 0;
 }

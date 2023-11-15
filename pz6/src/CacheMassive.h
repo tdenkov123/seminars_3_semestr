@@ -1,18 +1,18 @@
 #pragma once
-
 #include <iostream>
-
-using namespace std;
+#include <string>
 
 template <typename T> class CacheMassive {
     private:
         struct Node {
             Node* next;
+            Node* prev;
             T data;
             int id, accessCount;
             Node(T p_data, int p_id) {
                 data = p_data;
                 next = nullptr;
+                prev = nullptr;
                 id = p_id;
                 accessCount = 0;
             } 
@@ -44,6 +44,7 @@ template <typename T> class CacheMassive {
                     tmp->accessCount++;
                 }
             }
+            push_by_access_count(p_id);
         }
 
         int getSize() const {return size;}
@@ -67,6 +68,7 @@ template <typename T> class CacheMassive {
                     tmp = tmp->next;
                 }
                 tmp->next = newNode;
+                newNode->prev = tmp;
             } else head = newNode;
             size++;
         }
@@ -74,18 +76,33 @@ template <typename T> class CacheMassive {
         void print() {
             Node* tmp = head;
             while (tmp) {
-                cout << "{" << tmp->id << ' ' << tmp->accessCount << ' ' << tmp->data << "} ";
+                std::cout << "{" << tmp->id << ' ' << tmp->accessCount << ' ' << tmp->data << "} ";
                 tmp = tmp->next;
             }
-            cout << '\n';
+            std::cout << '\n';
         }
 
-        void sort() {
+        void push_by_access_count(int p_id) {
             Node* tmp = head;
+            while (p_id != tmp->id) tmp = tmp->next;
+            while (tmp->prev != nullptr && tmp->prev->accessCount <= tmp->accessCount) {
+                T tmp_data = tmp->data;
+                tmp->data = tmp->prev->data;
+                tmp->prev->data = tmp_data;
 
+                int tmp_id = tmp->id;
+                tmp->id = tmp->prev->id;
+                tmp->prev->id = tmp_id;
+
+                int tmp_access = tmp->accessCount;
+                tmp->accessCount = tmp->prev->accessCount;
+                tmp->prev->accessCount = tmp_access;
+
+                tmp = tmp->prev;
+            }
         }
 
-        string search(T elem) {
+        std::string search(T elem) {
             Node* tmp = head;
             bool flag = false;
             for (int i = 0; i < size; i++) {
@@ -97,7 +114,7 @@ template <typename T> class CacheMassive {
 
         void update(int p_id, T elem) {
             Node* tmp = getElemPointer(p_id);
-            if (tmp == nullptr) throw invalid_argument("std::invalid_argument");
-
+            if (tmp == nullptr) throw std::invalid_argument("std::invalid_argument");
+            tmp->data = elem;
         }
 };
