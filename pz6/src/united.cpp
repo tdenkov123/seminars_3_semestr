@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-
 template <typename T> class CacheMassive {
 private:
     struct Node {
@@ -84,22 +83,23 @@ public:
     }
 
     void push_by_access_count(int p_id) {
-        Node* tmp = head;
-        while (p_id != tmp->id) tmp = tmp->next;
-        while (tmp->prev != nullptr && tmp->prev->accessCount <= tmp->accessCount) {
-            T tmp_data = tmp->data;
-            tmp->data = tmp->prev->data;
-            tmp->prev->data = tmp_data;
+        while (head->prev != nullptr) head = head->prev;
+        Node* node = head;
+        while (p_id != node->id) node = node->next;
+        while (node->prev != nullptr && node->accessCount >= node->prev->accessCount) {
+            Node* prev_node = node->prev;
+            if (prev_node->prev) prev_node->prev->next = node;
+            if (node->next) node->next->prev = prev_node;
+            
+            Node* n_next = node->next;
+            Node* p_prev = prev_node->prev;
 
-            int tmp_id = tmp->id;
-            tmp->id = tmp->prev->id;
-            tmp->prev->id = tmp_id;
+            prev_node->prev = node;
+            prev_node->next = n_next;
+            node->prev = p_prev;
+            node->next = prev_node;
 
-            int tmp_access = tmp->accessCount;
-            tmp->accessCount = tmp->prev->accessCount;
-            tmp->prev->accessCount = tmp_access;
-
-            tmp = tmp->prev;
+            while (head->prev != nullptr) head = head->prev;
         }
     }
 
