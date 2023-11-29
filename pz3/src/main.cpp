@@ -1,8 +1,10 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 #include <chrono>
 #include <variant>
+#include <fstream>
 
 template <typename T>
 int compare(std::vector<T> &v) {
@@ -18,12 +20,16 @@ int compare(std::vector<T> &v) {
 	std::chrono::duration<float> fs = t1 - t0;
 	std::chrono::milliseconds durr = std::chrono::duration_cast<std::chrono::milliseconds>(fs);
 	std::cout << "Compare time: " << durr.count() << "ms\n";
-	return count;
+	return durr.count();
 }
 
 int main(int argc, char** argv) {
 	// Globals
 	int str_len = 3;
+
+	// Opening CSV
+	std::ofstream file;
+	file.open("data.csv", std::ios::app);
 
 	//Generating 3600 strings
 	std::string chars;
@@ -58,18 +64,11 @@ int main(int argc, char** argv) {
 		for (int j = i + 1; j < 3600; j++) {
 			if (hashes[i] == hashes[j] && strings[i] != strings[j]) {
 				count++;
-				std::cout << i << ' ' << j << '\n';
-				std::cout << strings[i] << ' ' << strings[j] << '\n';
 			}
 		}
 	}
-	std::cout << "\nCollision count: " << count << '\n';
-
-	// Time div
-	std::cout << "Hashes comparison. ";
-	compare(hashes);
-	std::cout << "Strings comparison. ";
-	compare(strings);
 	
+	file << str_len << ';' << compare(strings) << ';' << compare(hashes) << ';' << count << '\n';
+
 	return 0;
 }
