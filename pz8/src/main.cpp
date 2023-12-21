@@ -52,16 +52,18 @@ std::vector<Element> elements{ R01005, R0201, R0402, R0603, R0805, R0808, R1020,
 
 
 bool checkBorders(const Element& elem, double posX, double posY, int borderX, int borderY) {
-	return (posX - elem.sizeX / 2 > 0 && posX + elem.sizeX && 2 < borderX && posY - elem.sizeY / 2 > 0 && posY + elem.sizeY / 2 < borderY);
+	if (elem.id[0] == 'R')  return (posX - elem.sizeX > 0 && posX + elem.sizeX && 2 < borderX && posY - elem.sizeY > 0 && posY + elem.sizeY / 2 < borderY);
+	else return (posX - elem.sizeX / 2 > 0 && posX + elem.sizeX / 2 < borderX && posY - elem.sizeY / 2 > 0 && posY + elem.sizeY / 2 < borderY);
 }
-
 
 bool checkCollision(const Element& elem1, double x1, double y1, const Element& elem2, double x2, double y2) {
 	if (elem1.isRadial && elem2.isRadial) {
-		return (elem1.sizeX + elem2.sizeX < sqrt(pow(x1-x2, 2) + pow(y1-y2, 2)));
+		return (elem1.sizeX + elem2.sizeX < sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2)));
+
 	}
 	else if (!elem1.isRadial && !elem2.isRadial) {
-		return (abs(x1 - x2) > (elem1.sizeX + elem2.sizeX) / 2 || abs(y1 - y2) > (elem1.sizeY + elem2.sizeY) / 2);
+		if (elem1.id[0] == 'R') return (abs(x1 - x2) > (elem1.sizeX + elem2.sizeX) || abs(y1 - y2) > (elem1.sizeY + elem2.sizeY));
+		else return (abs(x1 - x2) > (elem1.sizeX + elem2.sizeX) / 2  || abs(y1 - y2) > (elem1.sizeY + elem2.sizeY) / 2);
 	}
 	else if (elem1.isRadial && !elem2.isRadial) {
 		double angle = abs(atan((x2 - x1) / (y2 - y1)));
